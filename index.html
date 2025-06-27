@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Asombroso Viaje de la Sangre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices: 
+        - General: Goal: Inform/Engage. Method: Thematic sections with interactive elements (details/summary for revealing content). Interaction: Click to expand/collapse. Justification: Reduces cognitive load, makes learning active.
+        - Partes (Corazón, Vasos, Sangre components): Goal: Inform/Organize. Method: HTML/CSS for text & Unicode icons (e.g., ❤️, 🩸). Interaction: Clickable summary to reveal details. Justification: Clear, categorized info, prevents overwhelming user.
+        - Funciones: Goal: Inform/Relate. Method: HTML/JS for interactive list (click part name, see function in a shared display area). Interaction: Click to display function. Justification: Active learning, direct cause-effect.
+        - Circulación: Goal: Explain Process. Method: Textual explanation broken into two sub-sections (Pulmonar, Sistémica). Interaction: Reading. Justification: Clear step-by-step for foundational understanding. A visual diagram would be a great next step but kept simple for this version to ensure clarity and avoid over-complexity without dedicated graphic tools.
+        - Cuidado: Goal: Actionable Info. Method: HTML/CSS cards with Unicode icons (🍎, 🏃‍♀️). Interaction: Reading. Justification: Visually appealing, easy-to-remember tips.
+        - Chart.js/Plotly.js: Not used as the source material is primarily qualitative and process-oriented, lacking quantitative data suitable for charting. Introducing charts would not enhance the educational goal for this specific content. -->
+    <style>
+        body {
+            font-family: 'Verdana', sans-serif; /* Amigable y legible */
+        }
+        .content-section {
+            scroll-margin-top: 80px; /* Ajuste para la barra de navegación fija */
+        }
+        details > summary {
+            cursor: pointer;
+            list-style: none; /* Quitar marcador por defecto */
+        }
+        details > summary::-webkit-details-marker {
+            display: none; /* Quitar marcador en Chrome/Safari */
+        }
+        details[open] > summary {
+            font-weight: 600;
+        }
+        .circ-path {
+            position: relative;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top:10px;
+        }
+        .circ-heart {
+            width: 50px;
+            height: 50px;
+            background-color: #ff7b7b; /* Rojo corazón */
+            border-radius: 50% 50% 50% 0 / 50% 50% 0 50%;
+            transform: rotate(-45deg);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+         .circ-heart-symbol {
+            transform: rotate(45deg);
+        }
+
+        .blood-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            animation-duration: 4s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+        .oxygenated {
+            background-color: #ff4d4d; /* Rojo brillante */
+        }
+        .deoxygenated {
+            background-color: #4d4dff; /* Azul */
+        }
+        /* Animación simple para puntos de sangre (conceptual) */
+        @keyframes flowRight {
+            0% { left: 5%; }
+            100% { left: 85%; }
+        }
+        @keyframes flowLeft {
+            0% { left: 85%; }
+            100% { left: 5%; }
+        }
+         .section-icon {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-stone-800">
+
+    <nav class="bg-sky-600 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-bold">El Asombroso Viaje de la Sangre ❤️</h1>
+            <button id="menu-toggle" class="sm:hidden text-2xl">☰</button>
+            <div id="menu-links" class="w-full sm:w-auto hidden sm:flex flex-col sm:flex-row sm:space-x-4 mt-2 sm:mt-0">
+                <a href="#que-es" class="hover:text-amber-200 py-1 sm:py-0">¿Qué es?</a>
+                <a href="#partes" class="hover:text-amber-200 py-1 sm:py-0">Partes</a>
+                <a href="#funciones" class="hover:text-amber-200 py-1 sm:py-0">Funciones</a>
+                <a href="#como-circula" class="hover:text-amber-200 py-1 sm:py-0">¿Cómo Circula?</a>
+                <a href="#a-cuidarnos" class="hover:text-amber-200 py-1 sm:py-0">¡A Cuidarnos!</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <section id="que-es" class="content-section my-8 p-6 bg-white rounded-xl shadow-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold text-sky-700 mb-4 flex items-center"><span class="section-icon">❓</span>¿Qué es el Aparato Circulatorio?</h2>
+            <p class="text-lg text-stone-700 leading-relaxed">
+                ¡Hola! El aparato circulatorio es como un increíble equipo de reparto que trabaja sin parar dentro de tu cuerpo. Su misión principal es llevar a todas partes lo que tus células necesitan para vivir (como el oxígeno y los nutrientes ricos 🚚) y recoger lo que ya no necesitan (como el dióxido de carbono 🗑️). ¡Es un sistema súper trabajador y muy importante!
+            </p>
+        </section>
+
+        <section id="partes" class="content-section my-8 p-6 bg-white rounded-xl shadow-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold text-sky-700 mb-6 flex items-center"><span class="section-icon">🧩</span>Partes Principales</h2>
+            <p class="text-lg text-stone-700 mb-6 leading-relaxed">El aparato circulatorio tiene tres partes principales que trabajan juntas como un gran equipo. Vamos a conocerlas:</p>
+            <div class="space-y-6">
+                <details class="bg-sky-50 p-4 rounded-lg hover:shadow-md transition-shadow">
+                    <summary class="text-xl font-semibold text-sky-700 flex items-center">
+                        <span class="text-2xl mr-2">❤️</span>El Corazón
+                        <span class="ml-auto text-sm text-sky-500">(haz clic para saber más)</span>
+                    </summary>
+                    <p class="mt-3 text-stone-700 leading-relaxed">Es el motor de este sistema. Un músculo muy fuerte, más o menos del tamaño de tu puño, que bombea la sangre para que viaje por todo el cuerpo. ¡Late todo el tiempo, incluso cuando duermes! Es como una bomba poderosa e incansable.</p>
+                </details>
+
+                <details class="bg-emerald-50 p-4 rounded-lg hover:shadow-md transition-shadow">
+                    <summary class="text-xl font-semibold text-emerald-700 flex items-center">
+                        <span class="text-2xl mr-2">➿</span>Los Vasos Sanguíneos
+                        <span class="ml-auto text-sm text-emerald-500">(haz clic para saber más)</span>
+                    </summary>
+                    <p class="mt-3 text-stone-700 leading-relaxed">Son como los tubos o mangueras por donde viaja la sangre. Hay tres tipos principales:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1 text-stone-700 pl-4">
+                        <li><strong>Arterias (🔴):</strong> Llevan la sangre rica en oxígeno y nutrientes desde el corazón hacia el resto del cuerpo. Son como las autopistas principales.</li>
+                        <li><strong>Venas (🔵):</strong> Llevan la sangre con dióxido de carbono y desechos de regreso al corazón. Son como las calles que recogen los desechos.</li>
+                        <li><strong>Capilares (〰️):</strong> Son vasos sanguíneos muy, muy pequeños y delgados. Conectan las arterias con las venas y permiten que el oxígeno y los nutrientes pasen a las células, y que los desechos pasen a la sangre. Son como los caminitos vecinales.</li>
+                    </ul>
+                </details>
+
+                <details class="bg-rose-50 p-4 rounded-lg hover:shadow-md transition-shadow">
+                    <summary class="text-xl font-semibold text-rose-700 flex items-center">
+                        <span class="text-2xl mr-2">🩸</span>La Sangre
+                        <span class="ml-auto text-sm text-rose-500">(haz clic para saber más)</span>
+                    </summary>
+                    <p class="mt-3 text-stone-700 leading-relaxed">Es el líquido rojo que viaja por los vasos sanguíneos. ¡No es solo un líquido! Está llena de cosas importantes:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1 text-stone-700 pl-4">
+                        <li><strong>Glóbulos Rojos (🔴):</strong> Pequeños transportistas de oxígeno. Le dan el color rojo a la sangre.</li>
+                        <li><strong>Glóbulos Blancos (⚪️):</strong> Los soldados defensores de tu cuerpo. Combaten gérmenes y enfermedades.</li>
+                        <li><strong>Plaquetas (🩹):</strong> Pequeños reparadores. Ayudan a detener el sangrado cuando te haces una herida.</li>
+                        <li><strong>Plasma (💧):</strong> La parte líquida de la sangre, de color amarillento. Transporta todo lo demás.</li>
+                    </ul>
+                </details>
+            </div>
+        </section>
+
+        <section id="funciones" class="content-section my-8 p-6 bg-white rounded-xl shadow-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold text-sky-700 mb-6 flex items-center"><span class="section-icon">⚙️</span>¿Qué Función Tiene Cada Parte?</h2>
+            <p class="text-lg text-stone-700 mb-4 leading-relaxed">Cada parte del aparato circulatorio tiene un trabajo especial. Haz clic en cada parte para descubrir su función:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <button data-function="corazon" class="interactive-function-btn bg-sky-100 text-sky-700 p-3 rounded-lg font-semibold hover:bg-sky-200 transition">❤️ Corazón</button>
+                <button data-function="arterias" class="interactive-function-btn bg-emerald-100 text-emerald-700 p-3 rounded-lg font-semibold hover:bg-emerald-200 transition">➿ Arterias</button>
+                <button data-function="venas" class="interactive-function-btn bg-emerald-100 text-emerald-700 p-3 rounded-lg font-semibold hover:bg-emerald-200 transition">➿ Venas</button>
+                <button data-function="capilares" class="interactive-function-btn bg-emerald-100 text-emerald-700 p-3 rounded-lg font-semibold hover:bg-emerald-200 transition">➿ Capilares</button>
+                <button data-function="sangre" class="interactive-function-btn bg-rose-100 text-rose-700 p-3 rounded-lg font-semibold hover:bg-rose-200 transition">🩸 Sangre</button>
+            </div>
+            <div id="function-display" class="mt-4 p-4 bg-stone-100 rounded-lg min-h-[100px] text-stone-700 leading-relaxed flex items-center justify-center">
+                <p>Selecciona una parte para ver su función aquí.</p>
+            </div>
+        </section>
+
+        <section id="como-circula" class="content-section my-8 p-6 bg-white rounded-xl shadow-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold text-sky-700 mb-6 flex items-center"><span class="section-icon">🔄</span>¿Cómo Circula la Sangre?</h2>
+            <p class="text-lg text-stone-700 mb-4 leading-relaxed">La circulación de la sangre es un viaje continuo y fascinante que ocurre en dos circuitos principales, ¡como si fueran dos rutas de un autobús que nunca para!</p>
+            
+            <div class="circ-heart"><span class="circ-heart-symbol">💖</span></div>
+            <p class="text-center text-stone-600 mb-4">Este es nuestro corazón, ¡el centro de todo!</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-sky-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold text-sky-700 mb-2">1. Circulación Pulmonar (o Menor) 🌬️➡️❤️</h3>
+                    <p class="text-stone-700 leading-relaxed">Imagina que esta es la ruta "limpia-aire":</p>
+                    <ul class="list-decimal list-inside mt-2 space-y-1 text-stone-700">
+                        <li>El corazón bombea la sangre "usada" (con dióxido de carbono 🔵) desde su lado derecho hacia los pulmones.</li>
+                        <li>En los pulmones, la sangre suelta el dióxido de carbono (que luego exhalas al respirar) y recoge oxígeno fresco (que inhalaste). ¡Se recarga!</li>
+                        <li>Esta sangre ahora "limpia" y llena de oxígeno (🔴) regresa al lado izquierdo del corazón.</li>
+                    </ul>
+                    <div class="circ-path mt-3">
+                        <div class="blood-dot deoxygenated" style="top: 20%; animation-name: flowRight;"></div>
+                        <p class="text-xs text-center text-stone-500">Corazón → Pulmones (Sangre azul)</p>
+                    </div>
+                     <div class="circ-path mt-1">
+                        <div class="blood-dot oxygenated" style="top: 70%; animation-name: flowLeft; animation-delay: 2s;"></div>
+                        <p class="text-xs text-center text-stone-500">Pulmones → Corazón (Sangre roja)</p>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold text-emerald-700 mb-2">2. Circulación Sistémica (o Mayor) ❤️➡️🧍</h3>
+                    <p class="text-stone-700 leading-relaxed">Esta es la ruta "reparto-por-el-cuerpo":</p>
+                    <ul class="list-decimal list-inside mt-2 space-y-1 text-stone-700">
+                        <li>El corazón bombea la sangre "limpia" (rica en oxígeno 🔴) desde su lado izquierdo hacia todo el resto del cuerpo a través de la arteria aorta (¡la autopista más grande!).</li>
+                        <li>La sangre viaja por arterias cada vez más pequeñas hasta llegar a los capilares en todos los tejidos y órganos.</li>
+                        <li>Aquí, entrega el oxígeno y los nutrientes a las células y recoge el dióxido de carbono y los desechos.</li>
+                        <li>La sangre ahora "usada" (🔵) regresa al lado derecho del corazón a través de las venas.</li>
+                    </ul>
+                     <div class="circ-path mt-3">
+                        <div class="blood-dot oxygenated" style="top: 20%; animation-name: flowRight;"></div>
+                        <p class="text-xs text-center text-stone-500">Corazón → Cuerpo (Sangre roja)</p>
+                    </div>
+                     <div class="circ-path mt-1">
+                        <div class="blood-dot deoxygenated" style="top: 70%; animation-name: flowLeft; animation-delay: 2s;"></div>
+                        <p class="text-xs text-center text-stone-500">Cuerpo → Corazón (Sangre azul)</p>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-6 text-lg text-center text-stone-700 font-semibold">¡Y así el ciclo comienza de nuevo, una y otra vez, sin parar, para mantenernos vivos y llenos de energía! 🚀</p>
+        </section>
+
+        <section id="a-cuidarnos" class="content-section my-8 p-6 bg-white rounded-xl shadow-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold text-sky-700 mb-6 flex items-center"><span class="section-icon">🌟</span>¡A Cuidar Nuestro Aparato Circulatorio!</h2>
+            <p class="text-lg text-stone-700 mb-6 leading-relaxed">Cuidar tu aparato circulatorio es muy importante para estar sano y fuerte. ¡Es como cuidar el motor de tu cuerpo! Aquí te dejo algunos consejos fáciles de seguir:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-green-50 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-green-700 mb-2 flex items-center"><span class="text-2xl mr-2">🍎</span>Come Saludable</h3>
+                    <p class="text-stone-700">Incluye frutas, verduras y granos. Evita mucha comida chatarra y dulces. ¡Bebe mucha agua! 💧</p>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-yellow-700 mb-2 flex items-center"><span class="text-2xl mr-2">🏃‍♀️</span>Haz Ejercicio</h3>
+                    <p class="text-stone-700">Juega, corre, salta, ¡muévete! El ejercicio hace tu corazón fuerte. Al menos 30 minutos al día.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-2 flex items-center"><span class="text-2xl mr-2">⚖️</span>Mantén un Peso Saludable</h3>
+                    <p class="text-stone-700">Comer bien y hacer ejercicio ayuda. El sobrepeso hace trabajar más a tu corazón.</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-red-700 mb-2 flex items-center"><span class="text-2xl mr-2">🚭</span>No Fumes</h3>
+                    <p class="text-stone-700">Fumar es muy malo para el corazón y los vasos sanguíneos. ¡Nunca empieces!</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-purple-700 mb-2 flex items-center"><span class="text-2xl mr-2">😴</span>Duerme lo Suficiente</h3>
+                    <p class="text-stone-700">Descansar bien ayuda a tu cuerpo y corazón a repararse y funcionar bien.</p>
+                </div>
+                <div class="bg-pink-50 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-pink-700 mb-2 flex items-center"><span class="text-2xl mr-2">🧘</span>Controla el Estrés</h3>
+                    <p class="text-stone-700">Busca actividades que te relajen como dibujar, leer o jugar. ¡Relajarse es bueno!</p>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-lg text-stone-700 font-semibold">¡Siguiendo estos consejos, ayudarás a que tu increíble aparato circulatorio funcione de maravilla por muchos, muchos años! 🎉</p>
+        </section>
+    </main>
+
+    <footer class="text-center p-6 bg-sky-700 text-sky-100 mt-8">
+        <p>Hecho con <span class="text-red-400">❤️</span> para aprender y explorar el cuerpo humano.</p>
+        <p>&copy; 2024 Viaje Sanguíneo Interactivo</p>
+    </footer>
+
+    <script>
+        // Menú móvil
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuLinks = document.getElementById('menu-links');
+        menuToggle.addEventListener('click', () => {
+            menuLinks.classList.toggle('hidden');
+        });
+
+        // Navegación suave para anclas
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    // Si es menú móvil, ciérralo después de hacer clic
+                    if (!menuLinks.classList.contains('sm:flex')) { // Solo si estamos en vista móvil
+                         menuLinks.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Funcionalidad de la sección "Funciones"
+        const functionButtons = document.querySelectorAll('.interactive-function-btn');
+        const functionDisplay = document.getElementById('function-display');
+        const functionsData = {
+            corazon: "Su función es <strong>bombear</strong> la sangre con fuerza para que llegue a cada rincón de tu cuerpo. Es como una bomba que nunca descansa.",
+            arterias: "Su función es <strong>transportar</strong> la sangre oxigenada y llena de nutrientes desde el corazón hacia todos los órganos y tejidos.",
+            venas: "Su función es <strong>recoger</strong> la sangre con dióxido de carbono y otros desechos de los tejidos y llevarla de vuelta al corazón.",
+            capilares: "Su función es permitir el <strong>intercambio</strong> de oxígeno, nutrientes y desechos entre la sangre y las células del cuerpo. Son el punto de entrega y recogida.",
+            sangre: "Su función es <strong>transportar</strong> oxígeno, nutrientes, hormonas, células de defensa y recoger desechos. También ayuda a mantener la temperatura de tu cuerpo."
+        };
+
+        functionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const functionKey = button.dataset.function;
+                if (functionsData[functionKey]) {
+                    functionDisplay.innerHTML = `<p>${functionsData[functionKey]}</p>`;
+                }
+                // Resaltar botón activo (opcional)
+                functionButtons.forEach(btn => btn.classList.remove('bg-sky-300', 'bg-emerald-300', 'bg-rose-300'));
+                if (button.classList.contains('bg-sky-100')) button.classList.add('bg-sky-300');
+                else if (button.classList.contains('bg-emerald-100')) button.classList.add('bg-emerald-300');
+                else if (button.classList.contains('bg-rose-100')) button.classList.add('bg-rose-300');
+
+            });
+        });
+    </script>
+
+</body>
+</html>
